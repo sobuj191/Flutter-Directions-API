@@ -10,7 +10,7 @@ class DirectionsPage extends StatefulWidget {
 }
 
 class _DirectionsPageState extends State<DirectionsPage> {
-  final String accessToken = 'pk.eyJ1IjoiemFpZGt1YmEiLCJhIjoiY2x1dGF2YzRhMDhieDJqcWYyZDloN203cyJ9.4ErZHaGTRhTqz4FRcUWn-w';
+  final String accessToken = 'Your Acces Token';
   LatLng origin = LatLng(37.7749, 12.5194); // San Francisco, CA
   LatLng destination = LatLng(37.8749, 12.5194); // Los Angeles, CA
   String apiUrl = '';
