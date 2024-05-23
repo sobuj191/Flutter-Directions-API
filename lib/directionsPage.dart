@@ -10,10 +10,12 @@ class DirectionsPage extends StatefulWidget {
 }
 
 class _DirectionsPageState extends State<DirectionsPage> {
-  final String accessToken = 'Your Acces Token';
+  final String accessToken = 'pk.eyJ1IjoiemFpZGt1YmEiLCJhIjoiY2x1dGF2YzRhMDhieDJqcWYyZDloN203cyJ9.4ErZHaGTRhTqz4FRcUWn-w';
   LatLng origin = LatLng(37.7749, 12.5194); // San Francisco, CA
   LatLng destination = LatLng(37.8749, 12.5194); // Los Angeles, CA
   String apiUrl = '';
+  double distance = 0.0;
+  double duration = 0.0;
 
   List<LatLng> routeCoordinates = [];
   @override
@@ -100,19 +102,47 @@ class _DirectionsPageState extends State<DirectionsPage> {
                 ),
               ],
               ),
+
             ],
           ),
-
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: FloatingActionButton(
-              onPressed: () {
-                fetchDirections();
-              },
-              child: Text('Fetch Directions'),
+          if (distance > 0 && duration > 0)
+            Positioned(
+              top: 10,
+              left: 10,
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Distance: ${distance.toStringAsFixed(2)} km',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Duration: ${duration.toStringAsFixed(2)} minutes',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -120,7 +150,7 @@ class _DirectionsPageState extends State<DirectionsPage> {
 
  Future<void> fetchDirections() async {
 
-      apiUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/${origin.longitude}%2C${origin.latitude}%3B${destination.longitude}%2C${destination.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
+      apiUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/${origin.longitude}%2C${origin.latitude}%3B${destination.longitude}%2C${destination.latitude}?alternatives=true&annotations=distance%2Cduration%2Cspeed&exclude=toll%2Cmotorway%2Cferry%2Cunpaved%2Ccash_only_tolls&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
 
 
     final response = await http.get(Uri.parse(apiUrl));
@@ -134,6 +164,8 @@ print(origin.latitude);
         List<dynamic> coordinates = routes[0]['geometry']['coordinates'];
         setState(() {
           routeCoordinates = coordinates.map((coord) => LatLng(coord[1], coord[0])).toList();
+          distance = routes[0]['distance'] / 1000; // Convert to km
+          duration = routes[0]['duration'] / 60;
         });
       }
       print("---------------------------------");
