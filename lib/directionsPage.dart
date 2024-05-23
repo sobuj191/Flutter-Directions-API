@@ -16,6 +16,11 @@ class _DirectionsPageState extends State<DirectionsPage> {
   String apiUrl = '';
 
   List<LatLng> routeCoordinates = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchDirections();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +90,12 @@ class _DirectionsPageState extends State<DirectionsPage> {
 
                 ],
               ),
+              if(routeCoordinates.isNotEmpty)
               PolylineLayer(
                 polylines: [
                 Polyline(
                   points: routeCoordinates,
-                  color: Colors.red,
+                  color: Colors.blue,
                   strokeWidth: 3.0,
                 ),
               ],
@@ -112,10 +118,10 @@ class _DirectionsPageState extends State<DirectionsPage> {
     );
   }
 
-  void fetchDirections() async {
-    setState(() {
-      apiUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/${origin.latitude}, ${origin.longitude}; ${destination.latitude}, ${destination.longitude}?steps=true&geometries=geojson&access_token=$accessToken';
-    });
+ Future<void> fetchDirections() async {
+
+      apiUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/${origin.longitude}%2C${origin.latitude}%3B${destination.longitude}%2C${destination.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
+
 
     final response = await http.get(Uri.parse(apiUrl));
 print(response.statusCode);
