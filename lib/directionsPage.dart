@@ -10,7 +10,7 @@ class DirectionsPage extends StatefulWidget {
 }
 
 class _DirectionsPageState extends State<DirectionsPage> {
-  final String accessToken = 'pk.eyJ1IjoiemFpZGt1YmEiLCJhIjoiY2x1dGF2YzRhMDhieDJqcWYyZDloN203cyJ9.4ErZHaGTRhTqz4FRcUWn-w';
+  final String accessToken = 'Add your Access Token';
   LatLng origin = LatLng(37.7749, 12.5194); // San Francisco, CA
   LatLng destination = LatLng(37.8749, 12.5194); // Los Angeles, CA
   String apiUrl = '';
@@ -32,28 +32,6 @@ class _DirectionsPageState extends State<DirectionsPage> {
       ),
       body: Stack(
         children: [
-          // FlutterMap(
-          //   options: MapOptions(
-          //     zoom: 18,
-          //     center: LatLng(37.7749, -122.4194),
-          //   ),
-          //   layers: [
-          //     // Tile Layer for the map background
-          //     TileLayerOptions(
-          //       urlTemplate: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=$accessToken',
-          //     ),
-          //     // Polyline Layer for drawing the route
-          //     PolylineLayerOptions(
-          //       polylines: [
-          //         Polyline(
-          //           points: routeCoordinates,
-          //           color: Colors.blue,
-          //           strokeWidth: 3.0,
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
           FlutterMap(
             options: MapOptions(
               zoom: 12.0,
@@ -164,7 +142,7 @@ print(origin.latitude);
         List<dynamic> coordinates = routes[0]['geometry']['coordinates'];
         setState(() {
           routeCoordinates = coordinates.map((coord) => LatLng(coord[1], coord[0])).toList();
-          distance = routes[0]['distance'] / 1000; // Convert to km
+          distance = routes[0]['distance'] / 1000;
           duration = routes[0]['duration'] / 60;
         });
       }
